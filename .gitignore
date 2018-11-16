@@ -2,3 +2,6 @@ remote-fuser*
 local
 cpanm
 *.tgz
+.*.swp
+blastdb
+
