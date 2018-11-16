@@ -44,7 +44,7 @@ run0: build
 
 check:
 	-docker exec rmt-fuser cat /blast/blastdb/nr_v5.pal
-	-docker exec rmt-fuser  ls /blast/cache/
+	-docker exec rmt-fuser find /blast/cache/ -type f
 	ls -lhR logs blastdb
 
 # these mounts do not work.
