@@ -1,0 +1,11 @@
+.git*
+*.sh
+*.tgz
+.*.swp
+Makefile
+blastdb
+local
+cpanm
+logs
+README.md
+remote-fuser-ctl-local.ini
