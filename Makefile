@@ -45,22 +45,26 @@ run0: build
 check:
 	-docker exec rmt-fuser cat /blast/blastdb/nr_v5.pal
 	-docker exec rmt-fuser find /blast/cache/ -type f
-	ls -lhR logs blastdb
+	-ls -lhR logs blastdb
+	-docker volume inspect logs blastdb
 
 # these mounts do not work.
 run_local_volume: build
-	docker run -d --name rmt-fuser --cap-add SYS_ADMIN --device /dev/fuse \
+	docker run -d --name rmt-fuser --privileged --cap-add SYS_ADMIN --device /dev/fuse \
 		-v logs:/var/log \
 		-v blastdb:/blast/blastdb ${IMG}
+	-docker ps
+	-docker volume ls
 
-run_with_docker_volume: build
-	docker run -d --name rmt-fuser --cap-add SYS_ADMIN --device /dev/fuse \
-		--mount type=volume,src=logs,dst=/var/log \
-		--mount type=volume,src=blastdb,dst=/blast/blastdb \
-		${IMG}
+#run_with_docker_volume: build
+#	docker run -d --name rmt-fuser --cap-add SYS_ADMIN --device /dev/fuse \
+#		--mount type=volume,src=logs,dst=/var/log \
+#		--mount type=volume,src=blastdb,dst=/blast/blastdb \
+#		${IMG}
 
 stop:
 	docker rm -f rmt-fuser
+	-docker volume rm logs blastdb
 
 
 ####################################
