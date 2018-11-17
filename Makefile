@@ -25,7 +25,7 @@ run: build
 		${IMG}
 
 # Fails b/c directory ${PWD}/blastdb isn't shared
-run2: build	
+run_shared: build	
 	[ -d logs ] || mkdir logs
 	[ -d blastdb ] || mkdir blastdb
 	docker run -d --name rmt-fuser --privileged --cap-add SYS_ADMIN --device /dev/fuse --security-opt apparmor=unconfined \
@@ -33,7 +33,7 @@ run2: build
 		-v ${PWD}/logs:/var/log:rw \
 		${IMG}
 
-# shows nothing on local blastdb dir
+# shows nothing on local blastdb dir, missing privileged
 run0: build
 	[ -d logs ] || mkdir logs
 	[ -d blastdb ] || mkdir blastdb
