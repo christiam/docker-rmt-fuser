@@ -74,7 +74,8 @@ clean:
 	${RM} -r remote-fuser-ctl* cpanm local remote-fuser logs blastdb *.log
 
 #.PHONY: publish
-#publish:
+# VERSION=0.1
+#publish: build
 #	docker tag rmt-fuser christiam/docker-rmt-fuser:${VERSION}
 #	docker tag rmt-fuser christiam/docker-rmt-fuser:latest
 #	docker push christiam/docker-rmt-fuser
