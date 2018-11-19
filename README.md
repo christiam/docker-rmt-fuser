@@ -11,6 +11,8 @@ reside in the `gs://blast-db` GCS bucket.
 
 ## Instructions
 
+*N.B.*: these instructions assume Ubuntu Linux
+
 * `make run` creates and runs a docker container with remote-fuser configured to get 
  BLAST databases from GCS, however, these cannot be seen outside the container
 * `make check` runs a few commands to demonstrate that.
