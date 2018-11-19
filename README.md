@@ -16,6 +16,8 @@ reside in the `gs://blast-db` GCS bucket.
 * `make run` creates and runs a docker container with remote-fuser configured to get 
  BLAST databases from GCS, however, these cannot be seen outside the container
 * `make check` runs a few commands to demonstrate that.
+* `make run_shared` same as `make run` but it sets the bind-propagation to the value of 
+the `BP` environment variable (`shared` by default).
 * `make stop` stops and removes the most recently started remote-fuser docker container.
 * `make clean` removes all binaries and locally downloaded scripts
 * `make fuse.xml` retrieves the `remote-fuser` configuration file
