@@ -31,7 +31,7 @@ run: build
 		${IMG}
 
 BP?=shared
-# Fails b/c directory ${PWD}/blastdb isn't shared
+# docker: Error response from daemon: linux mounts: path /home/camacho/docker-rmt-fuser/blastdb is mounted on /home but it is not a shared mount.
 run_shared: build	
 	[ -d logs ] || mkdir logs
 	[ -d blastdb ] || mkdir blastdb
