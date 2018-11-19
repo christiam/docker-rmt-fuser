@@ -16,13 +16,10 @@ RUN apt-get -y -m update && \
 
 WORKDIR /sbin
 RUN curl -s ftp://ftp.ncbi.nlm.nih.gov/blast/executables/remote-fuser/remote-fuser.tgz | tar -zxf - && \
-    chmod +x remote-fuser && \
+    chmod +x remote-fuser remote-fuser-ctl.pl && \
     head -20 ./config-gcs-access.sh > tmp.sh && bash ./tmp.sh && \
     rm -fr config-gcs-access.sh README.txt tmp.sh
-COPY remote-fuser-ctl.pl /sbin/
-RUN chmod +x /sbin/remote-fuser-ctl.pl
-WORKDIR /etc
-COPY remote-fuser-ctl.ini .
+COPY remote-fuser-ctl.ini /etc/
 
 RUN mkdir -p /blast/blastdb
 
