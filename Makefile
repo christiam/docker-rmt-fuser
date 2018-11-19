@@ -40,6 +40,9 @@ run_shared: build
 		-v ${PWD}/logs:/var/log:rw \
 		${IMG}
 
+make_shared:
+	mount --make-shared /
+
 check:
 	-docker exec rmt-fuser cat /blast/blastdb/nr_v5.pal
 	-docker exec rmt-fuser find /blast/cache/ -type f
