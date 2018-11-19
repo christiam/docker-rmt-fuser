@@ -91,5 +91,5 @@ check_local:
 	ls -lhR blastdb-local-remote-fuser
 
 stop_local:
-	PATH=${PATH}:${PWD} PERL5LIB=${PWD}/local/lib/perl5 ./remote-fuser-ctl.pl --stop --config ./remote-fuser-ctl-local.ini --verbos
+	PATH=${PATH}:${PWD} PERL5LIB=${PWD}/local/lib/perl5 ./remote-fuser-ctl.pl --stop --config ./remote-fuser-ctl-local.ini --verbose
 	${RM} -r blastdb-local-remote-fuser
