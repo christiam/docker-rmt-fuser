@@ -2,7 +2,7 @@
 # Author: Christiam Camacho (camacho@ncbi.nlm.nih.gov)
 
 SHELL=/bin/bash
-.PHONY: build push run
+.PHONY: build run_shared run clean check check2 stop run_local_volume run_local check_local stop_local
 
 IMG=rmt-fuser
 
@@ -12,43 +12,45 @@ build: remote-fuser-ctl.ini
 # This also brings remote-fuser-ctl.pl
 remote-fuser-ctl.ini:
 	curl -s ftp://ftp.ncbi.nlm.nih.gov/blast/executables/remote-fuser/remote-fuser.tgz | tar -zxf -
-	./config-gcs-access.sh
-	${RM} config-gcs-access.sh README.txt
+	head -20 ./config-gcs-access.sh > tmp.sh
+	chmod +x tmp.sh
+	./tmp.sh
+	${RM} config-gcs-access.sh README.txt tmp.sh
 
-# Conclusion, running rmt-fuser as a daemon doesn't work, as it's virtual file system isn't exposed. The only way to run it is as a single docker instance and then run BLAST in that.
+# Exposes FUSE inside container, but not outside or to other containers
 run: build
 	[ -d logs ] || mkdir logs
 	[ -d blastdb ] || mkdir blastdb
-	docker run -d --name rmt-fuser --privileged --cap-add SYS_ADMIN --device /dev/fuse --security-opt apparmor=unconfined \
+	#docker run -d --name rmt-fuser --cap-add SYS_ADMIN --device /dev/fuse --security-opt apparmor=unconfined \
+		--mount type=bind,src=${PWD}/logs,dst=/var/log \
+		--mount type=bind,src=${PWD}/blastdb,dst=/blast \
+		${IMG}
+	docker run -d --name rmt-fuser --cap-add SYS_ADMIN --device /dev/fuse \
 		--mount type=bind,src=${PWD}/logs,dst=/var/log \
 		--mount type=bind,src=${PWD}/blastdb,dst=/blast \
 		${IMG}
 
+BP?=shared
 # Fails b/c directory ${PWD}/blastdb isn't shared
 run_shared: build	
 	[ -d logs ] || mkdir logs
 	[ -d blastdb ] || mkdir blastdb
 	docker run -d --name rmt-fuser --privileged --cap-add SYS_ADMIN --device /dev/fuse --security-opt apparmor=unconfined \
-		-v ${PWD}/blastdb:/blast:shared \
+		-v ${PWD}/blastdb:/blast:${BP} \
 		-v ${PWD}/logs:/var/log:rw \
-		${IMG}
-
-# shows nothing on local blastdb dir, missing privileged
-run0: build
-	[ -d logs ] || mkdir logs
-	[ -d blastdb ] || mkdir blastdb
-	docker run -d --name rmt-fuser --cap-add SYS_ADMIN --device /dev/fuse \
-		-v ${PWD}/logs:/var/log \
-		-v ${PWD}/blastdb:/blast/blastdb \
 		${IMG}
 
 check:
 	-docker exec rmt-fuser cat /blast/blastdb/nr_v5.pal
 	-docker exec rmt-fuser find /blast/cache/ -type f
-	-ls -lhR logs blastdb
+	-find logs blastdb -ls
 	-docker volume inspect logs blastdb
+	-docker run -v ${PWD}/blastdb:/blast:ro ubuntu cat /blast/blastdb/nr_v5.pal
+	-docker run -v ${PWD}/blastdb:/blast:ro ubuntu find /blast -ls
 
-# these mounts do not work.
+check2:
+	-docker exec rmt-fuser cat /blast/blastdb/nt_v5.nal
+
 run_local_volume: build
 	docker run -d --name rmt-fuser --privileged --cap-add SYS_ADMIN --device /dev/fuse \
 		-v logs:/var/log \
@@ -56,16 +58,17 @@ run_local_volume: build
 	-docker ps
 	-docker volume ls
 
-#run_with_docker_volume: build
-#	docker run -d --name rmt-fuser --cap-add SYS_ADMIN --device /dev/fuse \
-#		--mount type=volume,src=logs,dst=/var/log \
-#		--mount type=volume,src=blastdb,dst=/blast/blastdb \
-#		${IMG}
-
 stop:
-	docker rm -f rmt-fuser
+	-docker rm -f rmt-fuser
+	${RM} -r logs blastdb
 	-docker volume rm logs blastdb
 
+fuse.xml: remote-fuser-ctl.ini
+	curl -s `awk -F= '/^config/ {print $$2}' remote-fuser-ctl.ini` -o $@
+
+
+clean:
+	${RM} -r remote-fuser-ctl* cpanm local remote-fuser logs blastdb *.log
 
 ####################################
 # Check remote-fuser locally
@@ -90,6 +93,3 @@ check_local:
 stop_local:
 	PATH=${PATH}:${PWD} PERL5LIB=${PWD}/local/lib/perl5 ./remote-fuser-ctl.pl --stop --config ./remote-fuser-ctl-local.ini --verbos
 	${RM} -r blastdb-local-remote-fuser
-
-clean:
-	${RM} -r remote-fuser-ctl* cpanm local remote-fuser blastdb *.log
