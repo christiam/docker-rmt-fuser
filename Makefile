@@ -73,6 +73,12 @@ fuse.xml: remote-fuser-ctl.ini
 clean:
 	${RM} -r remote-fuser-ctl* cpanm local remote-fuser logs blastdb *.log
 
+#.PHONY: publish
+#publish:
+#	docker tag rmt-fuser christiam/docker-rmt-fuser:${VERSION}
+#	docker tag rmt-fuser christiam/docker-rmt-fuser:latest
+#	docker push christiam/docker-rmt-fuser
+
 ####################################
 # Check remote-fuser locally
 
