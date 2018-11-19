@@ -15,8 +15,10 @@ RUN apt-get -y -m update && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /sbin
-RUN curl -s ftp://ftp.ncbi.nlm.nih.gov/blast/temp/remote-fuser-wb3176 -o remote-fuser && \
-    chmod +x remote-fuser
+RUN curl -s ftp://ftp.ncbi.nlm.nih.gov/blast/executables/remote-fuser/remote-fuser.tgz | tar -zxf - && \
+    chmod +x remote-fuser && \
+    head -20 ./config-gcs-access.sh > tmp.sh && bash ./tmp.sh && \
+    rm -fr config-gcs-access.sh README.txt tmp.sh
 COPY remote-fuser-ctl.pl /sbin/
 RUN chmod +x /sbin/remote-fuser-ctl.pl
 WORKDIR /etc
