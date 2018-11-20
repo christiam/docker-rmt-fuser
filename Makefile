@@ -63,7 +63,7 @@ run_local_volume: build
 
 stop:
 	-docker rm -f rmt-fuser
-	${RM} -r logs blastdb
+	sudo ${RM} -r logs blastdb
 	-docker volume rm logs blastdb
 
 fuse.xml: remote-fuser-ctl.ini
