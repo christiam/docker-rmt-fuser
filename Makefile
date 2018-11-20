@@ -73,6 +73,29 @@ fuse.xml: remote-fuser-ctl.ini
 clean:
 	${RM} -r remote-fuser-ctl* cpanm local remote-fuser logs blastdb *.log
 
+####################################
+# Test bind propagation
+# Try on debian
+HOST_DIR=/srv/test
+CONTAINER_DIR=/foo
+bind_propagation_start:
+	[ -d ${HOST_DIR} ] || mkdir -p ${HOST_DIR}
+	docker run --name testbp -d --privileged --mount type=bind,src=${HOST_DIR},dst=${CONTAINER_DIR},bind-propagation=shared ubuntu
+	ls -lha ${HOST_DIR}
+
+bind_propagation_check:
+	docker exec testbp mkdir -p ${CONTAINER_DIR}/bin
+	docker exec testbp mount --bind /bin ${CONTAINER_DIR}/bin
+	#docker exec testbp mount --bind --make-shared /bin ${CONTAINER_DIR}/bin
+	ls -lha ${HOST_DIR}
+
+bind_propagation_stop:
+	-docker stop testbp
+	-docker logs testbp
+	-docket rm testbp
+	-sudo ${RM} -r ${HOST_DIR}
+
+####################################
 #.PHONY: publish
 # VERSION=0.1
 #publish: build
