@@ -75,7 +75,6 @@ clean:
 
 ####################################
 # Test bind propagation
-# Try on debian
 HOST_DIR=/srv/test
 CONTAINER_DIR=/foo
 bind_propagation_start:
