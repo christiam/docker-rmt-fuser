@@ -80,7 +80,8 @@ HOST_DIR=/srv/test
 CONTAINER_DIR=/foo
 bind_propagation_start:
 	[ -d ${HOST_DIR} ] || sudo mkdir -p ${HOST_DIR}
-	docker run --name testbp -d --privileged --mount type=bind,src=${HOST_DIR},dst=${CONTAINER_DIR},bind-propagation=shared ubuntu
+	docker run --name testbp -d --privileged --mount type=bind,src=${HOST_DIR},dst=${CONTAINER_DIR},bind-propagation=shared ubuntu mkdir ${CONTAINER_DIR}
+	#docker run --name testbp -d --privileged -v ${HOST_DIR}:${CONTAINER_DIR}:shared ubuntu
 	ls -lha ${HOST_DIR}
 
 bind_propagation_check:
