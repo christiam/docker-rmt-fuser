@@ -9,3 +9,5 @@ cpanm
 logs
 README.md
 remote-fuser-ctl-local.ini
+mount-tests
+rclone-test
