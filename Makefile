@@ -98,6 +98,22 @@ bind_propagation_stop:
 	-sudo ${RM} -r ${HOST_DIR}
 
 ####################################
+DST=/etc/systemd/system/docker.service.d
+.PHONY: overrides_blank overrides_shared
+overrides_blank:
+	echo -e '[Service]\nMountFlags=' > overrides.conf
+	[ -d ${DST} ] || sudo mkdir -p ${DST}
+	sudo mv overrides.conf ${DST}
+
+overrides_shared:
+	echo -e '[Service]\nMountFlags=shared' > overrides.conf
+	[ -d ${DST} ] || sudo mkdir -p ${DST}
+	sudo mv overrides.conf ${DST}
+
+rm_overrides:
+	sudo ${RM} overrides.conf ${DST}
+
+####################################
 #.PHONY: publish
 # VERSION=0.1
 #publish: build
