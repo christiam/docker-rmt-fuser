@@ -79,7 +79,7 @@ clean:
 HOST_DIR=/srv/test
 CONTAINER_DIR=/foo
 bind_propagation_start:
-	[ -d ${HOST_DIR} ] || mkdir -p ${HOST_DIR}
+	[ -d ${HOST_DIR} ] || sudo mkdir -p ${HOST_DIR}
 	docker run --name testbp -d --privileged --mount type=bind,src=${HOST_DIR},dst=${CONTAINER_DIR},bind-propagation=shared ubuntu
 	ls -lha ${HOST_DIR}
 
