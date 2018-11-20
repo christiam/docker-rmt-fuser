@@ -93,7 +93,7 @@ bind_propagation_check:
 bind_propagation_stop:
 	-docker stop testbp
 	-docker logs testbp
-	-docket rm testbp
+	-docker rm testbp
 	-sudo ${RM} -r ${HOST_DIR}
 
 ####################################
