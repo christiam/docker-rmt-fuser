@@ -11,7 +11,11 @@ IMG=rmt-fuser
 
 [ -d logs ] || sudo mkdir logs
 [ -d blastdb ] || sudo mkdir blastdb
+#docker run -d --name rmt-fuser --cap-add SYS_ADMIN --device /dev/fuse --security-opt apparmor=unconfined \
+#    --mount type=bind,src=${PWD}/logs,dst=/var/log \
+#    --mount type=bind,src=${PWD}/blastdb,dst=/blast \
+#    ${IMG}
 docker run -d --name rmt-fuser --cap-add SYS_ADMIN --device /dev/fuse --security-opt apparmor=unconfined \
-    --mount type=bind,src=${PWD}/logs,dst=/var/log \
-    --mount type=bind,src=${PWD}/blastdb,dst=/blast \
+    -v ${PWD}/logs:/var/log \
+    -v ${PWD}/blastdb:/blast \
     ${IMG}

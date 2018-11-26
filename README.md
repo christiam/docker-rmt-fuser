@@ -30,7 +30,11 @@ the `BP` environment variable (`shared` by default).
    `git clone https://github.com/christiam/docker-rmt-fuser.git`
 1. Build image
    `cd docker-rmt-fuser && sudo bash -x cos-build.sh`
-1. Run image
-1. Check image
+1. Run the container
+   `bash -x cos-run.sh`
+1. Check the local file system
+   `bash -x cos-check.sh`
+1. Stop the container
+   `docker rm -f rmt-fuser`
  
 [1]: https://github.com/ncbi/sra-tools
