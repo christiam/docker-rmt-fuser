@@ -47,5 +47,9 @@ the `BP` environment variable (`shared` by default).
 1. Stop the container
 
    `docker rm -f rmt-fuser`
+
+1. Outside the COS instance, to stop it, please run:
+
+   `make cos_stop`
  
 [1]: https://github.com/ncbi/sra-tools
