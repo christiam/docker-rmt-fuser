@@ -1,5 +1,5 @@
 #!/bin/bash
-# cos-check.sh: What this script does
+# cos-check.sh: Check the remote-fuser docker container
 #
 # Author: Christiam Camacho (camacho@ncbi.nlm.nih.gov)
 # Created: Mon 26 Nov 2018 02:38:40 PM EST

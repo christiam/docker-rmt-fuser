@@ -21,5 +21,16 @@ the `BP` environment variable (`shared` by default).
 * `make stop` stops and removes the most recently started remote-fuser docker container.
 * `make clean` removes all binaries and locally downloaded scripts
 * `make fuse.xml` retrieves the `remote-fuser` configuration file
+
+### Instructions on GCP COS
+
+1. Create a COS instance:
+   `make cos_start`
+1. On the newly created instance (named `rmt-fuser-test-$USER` by default):
+   `git clone https://github.com/christiam/docker-rmt-fuser.git`
+1. Build image
+   `cd docker-rmt-fuser && sudo bash -x cos-build.sh`
+1. Run image
+1. Check image
  
 [1]: https://github.com/ncbi/sra-tools

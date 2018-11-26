@@ -1,5 +1,5 @@
 #!/bin/bash
-# cos-build.sh: What this script does
+# cos-build.sh: Builds the remote-fuser image in COS
 #
 # Author: Christiam Camacho (camacho@ncbi.nlm.nih.gov)
 # Created: Mon 26 Nov 2018 02:36:57 PM EST
@@ -16,4 +16,5 @@ sudo chmod +x tmp.sh
 sudo bash -x ./tmp.sh
 sudo rm -f config-gcs-access.sh README.txt tmp.sh
 cd -
+cp -v ${OLDPWD}/remote-fuser* .
 docker build -t ${IMG} .
