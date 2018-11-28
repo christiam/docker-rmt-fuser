@@ -16,6 +16,6 @@ IMG=rmt-fuser
 #    --mount type=bind,src=${PWD}/blastdb,dst=/blast \
 #    ${IMG}
 docker run -d --name rmt-fuser --cap-add SYS_ADMIN --device /dev/fuse --security-opt apparmor=unconfined \
-    -v ${PWD}/logs:/var/log \
-    -v ${PWD}/blastdb:/blast \
+    -v ${PWD}/logs:/var/log:rw \
+    -v ${PWD}/blastdb:/blast:shared \
     ${IMG}
