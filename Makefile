@@ -104,7 +104,7 @@ bind_propagation_stop:
 
 TYPE?=n1-standard-8
 ZONE?=us-east4-b
-VM_IMG?=cos-69-10895-93-0			# Container-Optimized OS 69-10895.93.0 stable
+VM_IMG?=cos-stable-70-11021-99-0
 cos_start:
 	@[ ! -z "${GCP_PRJ}" ] || \
 		{ echo "Please define GCP_PRJ environment variable"; exit 1; }
